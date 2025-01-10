@@ -1,0 +1,13 @@
+# Virtual environment
+env/
+venv/
+StirAssignmentAnubhav
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# Other common files
+.DS_Store
+*.log
+.env

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Trends</title>
+</head>
+<body>
+    <h1>Twitter Trends</h1>
+    <button id="run-script">Click here to run the script</button>
+    <div id="results"></div>
+    <script>
+        document.getElementById("run-script").addEventListener("click", async () => {
+            document.getElementById("results").innerHTML = "Running the script, please wait...";
+            try {
+                const response = await fetch("/run-script");
+                if (response.ok) {
+                    const data = await response.json();
+                    const { trends, timestamp, ip_address, record } = data;
+
+                    const trendsList = trends.map((trend, index) => `<li>${trend}</li>`).join("");
+
+                    document.getElementById("results").innerHTML = `
+                        <h2>These are the most happening topics as on ${timestamp}</h2>
+                        <ul>${trendsList}</ul>
+                        <p>The IP address used for this query was ${ip_address}.</p>
+                        <h3>Here’s a JSON extract of this record from the MongoDB:</h3>
+                        <pre>${JSON.stringify(record, null, 4)}</pre>
+                        <button id="run-again">Click here to run the query again</button>
+                    `;
+
+                    document.getElementById("run-again").addEventListener("click", () => {
+                        document.getElementById("run-script").click();
+                    });
+                } else {
+                    document.getElementById("results").innerHTML = "An error occurred while running the script.";
+                }
+            } catch (error) {
+                document.getElementById("results").innerHTML = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
